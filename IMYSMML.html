@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Will You Be My Valentine?</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f9e3e3;
+            font-family: 'Arial', sans-serif;
+            flex-direction: column;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            color: #d32f2f;
+        }
+
+        .buttons {
+            margin-top: 20px;
+        }
+
+        .yes-button,
+        .no-button {
+            font-size: 1.5em;
+            padding: 10px 20px;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .yes-button {
+            background-color: #4caf50;
+            margin-right: 10px;
+        }
+
+        .no-button {
+            background-color: #f44336;
+        }
+
+        .gif_container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        /* Hide the audio controls */
+        .custom-audio-controls {
+            display: none;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Styles for the "Yes" Page */
+        #yesPage {
+            background-color: #fce7e3;
+            text-align: center;
+            padding: 50px;
+            width: 100%;
+            height: 100vh;
+        }
+
+        .header_text {
+            font-size: 3em;
+            color: #d32f2f;
+            margin-bottom: 20px;
+        }
+
+        .gif_container img {
+            width: 100%;
+            max-width: 500px;
+            height: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Valentine's Proposal Page -->
+    <div id="valentinePage" class="container">
+        <h1>Will you be my Valentine?</h1>
+        <div class="buttons">
+            <button class="yes-button" onclick="handleYesClick()">Yes</button>
+            <button class="no-button" onclick="handleNoClick()">No</button>
+        </div>
+        <div class="gif_container">
+            <img src="https://media.giphy.com/media/hiUWdIjaHotX8rwmE5/giphy.gif" alt="Cute GIF">
+        </div>
+        <audio id="audio">
+            <source src="https://www.dropbox.com/scl/fi/fq0vwv01aziuqgldwbm1e/wwd.mp3juice.blog-H.E.R.-Best-Part-Lyrics-Ft.-Daniel-Caesar-1-mp3cut.net.mp3?rlkey=zxh0zkqw50fisi2djlphyl67w&st=1tcq57og&raw=1" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+    </div>
+
+    <!-- "Yes" Page -->
+    <div id="yesPage" class="hidden">
+        <h1 class="header_text">YAYY!! I MISS YOU MY HONEYBUNCH SUGARPLUM PAMPIAMPIAM😞😓😟😥😢☹️🙁🫤😕😰😨😧😦😖😣😩😫😵</h1>
+        <div class="gif_container">
+            <img src="https://media.giphy.com/media/3OhXBaoR1tVPW/giphy.gif" alt="Cat Love Sad">
+        </div>
+    </div>
+
+    <script>
+        const messages = [
+            "Are you sure?",
+            "Really sure??",
+            "Are you positive?",
+            "Pookie please...",
+            "Just think about it!",
+            "If you say no, I will be really sad...",
+            "I will be very sad...",
+            "I will be very very very sad...",
+            "Ok fine, I will stop asking...",
+            "Just kidding, say yes please! ❤️"
+        ];
+
+        let messageIndex = 0;
+
+        function handleNoClick() {
+            const noButton = document.querySelector('.no-button');
+            const yesButton = document.querySelector('.yes-button');
+            noButton.textContent = messages[messageIndex];
+            messageIndex = (messageIndex + 1) % messages.length;
+            const currentSize = parseFloat(window.getComputedStyle(yesButton).fontSize);
+            yesButton.style.fontSize = `${currentSize * 1.5}px`;
+        }
+
+        function handleYesClick() {
+            // Hide the Valentine Page and Show the "Yes" Page
+            document.getElementById('valentinePage').classList.add('hidden');
+            document.getElementById('yesPage').classList.remove('hidden');
+
+            // Play the music when "YES" is clicked
+            const audio = document.getElementById('audio');
+            if (audio) {
+                audio.play();
+            }
+
+            // Send a POST request when YES is clicked
+            fetch("http://localhost:3000/yes-clicked", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    click: "yes"
+                })
+            })
+            .then(response => response.text())
+            .then(data => console.log(data))
+            .catch(error => console.error("Error:", error));
+        }
+    </script>
+</body>
+
+</html>
